@@ -150,7 +150,13 @@ int main(int argc, const char** argv)
 	firstFrame.release();
 	Mat grayForRect;
 		
-    for(;;)
+	if( !body_cascade.load( body_cascade_name ) )
+	{
+		printf("--(!)Error loading body_cascade_name\n");
+		return -1;
+	}
+
+	for(;;)
     {
 		stringstream ss;
 		ss << frameCount;
@@ -163,11 +169,6 @@ int main(int argc, const char** argv)
         if( img.empty() )
             break;
 
-		if( !body_cascade.load( body_cascade_name ) )
-		{ 
-			printf("--(!)Error loading body_cascade_name\n");
-			return -1;
-		}
 
 		//Instantiate object to handle body tracking.
 		CourtPositionEstimator courtEstimator(body_cascade, 
@@ -223,6 +224,7 @@ int main(int argc, const char** argv)
 			rectangle(img, freezeBB.tl(), freezeBB.br(), Scalar(180, 50, 0), 2, 8, 0);
 		}
 
+		rectangle(img, bBallRect.tl(), bBallRect.br(), Scalar(180, 255, 0), 2, 8, 0);
 		if (haveChart) //Once true, this processing must happen every frame.
 		{
 			bBallRect = secondPipe.secondProcessFrame(img);
@@ -235,8 +237,13 @@ int main(int argc, const char** argv)
 							&& (bBallRect.y > topImgBoundary)
 							&& (bBallRect.y < bottomImgBoundary)) 
 			{
+				//*********  For Testing only
+				//rectangle(img, bBallRect.tl(), bBallRect.br(), Scalar(180, 255, 0), 2, 8, 0);
+				//****************
+
+
 				//The basketball on video frames.
-				cout << "freezeBB= " << freezeBB 
+				cout << frameCount << ": freezeBB= " << freezeBB
 					 << "bBallRect= " << bBallRect 
 					 << " is inside boundaries" << endl;
 				
