@@ -14,7 +14,8 @@ Rect BlockRectFinder::getBoundRects(const Mat& imageFrame,
 										Mat& threshold_output, 
 										vector<Vec4i> hierarchy, 
 										vector< vector<Point> > boardContours,
-										int file_number) {
+										int file_number)
+{
 	findContours( threshold_output, boardContours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 	
 	vector< vector<Point> > contours_poly( boardContours.size() );
@@ -24,8 +25,9 @@ Rect BlockRectFinder::getBoundRects(const Mat& imageFrame,
 	
 	///*************************Start of main code to detect BackBoard************************* 	
 	for ( int i = 0; i < boardContours.size(); i++ ) {
-		approxPolyDP(Mat(boardContours[i]),contours_poly[i],3,true);
-		boundRects[i] = boundingRect(Mat(contours_poly[i]));
+		approxPolyDP(Mat(boardContours[i]),contours_poly[i],3,true);	//Finds all polygon shapes in the contour input. Used later to find rectangles, i.e. basketball backboard.
+		boundRects[i] = boundingRect(Mat(contours_poly[i]));			//Converting all the polygons found into rectangles.
+																		//Below will be try to identify which one is the basketball backboard.
 	}
 
 	Rect backBoardRect = findBackboard(imageFrame, boardContours.size(), boundRects, file_number);

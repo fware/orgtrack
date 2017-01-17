@@ -27,10 +27,9 @@ public:
 	void getGray(const Mat& image, Mat& gray);
 private:
 	int thresh;
-	Mat fgimg;
+	RNG rng;
 	Mat fgmask;
 	Mat imgBball;
-	Mat imgBBallGray;
 	Ptr<BackgroundSubtractor> bg_model;	
 	vector<vector<Point> > bballContours;
 	vector<Vec4i> hierarchy;

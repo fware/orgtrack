@@ -18,11 +18,12 @@ Rect InitialFrameProcessor::initialProcessFrame(const Mat& img)
 	vector<Vec4i> hierarchy;
 	vector< vector<Point> > boardContours;
 	
-	getGray(img,grayForRect);
-	blur(grayForRect, grayForRect, Size(3,3));
-	equalizeHist(grayForRect, grayForRect);
-	threshold(grayForRect, threshold_output, m_thresh, 255, THRESH_BINARY);
-	findContours( threshold_output, boardContours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+	getGray(img,grayForRect);												//Converts to a gray image.  All we need is a gray image for cv computing.
+	blur(grayForRect, grayForRect, Size(3,3));								//Blurs, i.e. smooths, an image using the normalized box filter.  Used to reduce noise.
+	equalizeHist(grayForRect, grayForRect);									//Equalizes the histogram of the input image.  Normalizes the brightness and increases the contrast of the image.
+	threshold(grayForRect, threshold_output, m_thresh, 255, THRESH_BINARY);	//Fixed-level thresholding.  Used here to produce a bi-level image.  Can also be used to remove noise.
+	findContours( threshold_output, boardContours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );	//Finds contours in binary image. Contours are useful for shape analysis
+																													//and object detection & recognition.
 
 	Rect backBoardRect = m_bRF.getBoundRects(img, threshold_output, hierarchy, boardContours, m_filenumber);
 

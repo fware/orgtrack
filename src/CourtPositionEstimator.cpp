@@ -13,12 +13,12 @@ CourtPositionEstimator::CourtPositionEstimator(
 	PlayerInfo& pInfo,
 	int& leftImgBoundary,
 	int& rightImgBoundary,
-	vector<int>& hTableRange) 
+	vector<int>& radiusArray)
 	: mClassifier(body_cascade), 
 	  mPlayerInfo(pInfo),
 	  mLeftImgBoundary(leftImgBoundary),
 	  mRightImgBoundary(rightImgBoundary),
-	  mHTableRange(hTableRange)
+	  mRadiusArray(radiusArray)
 {
 }
 
@@ -41,16 +41,16 @@ PlayerInfo CourtPositionEstimator::findBody(const Mat & grayFrame)
 
 		if (distFromBB > 135) 
 		{
-			mPlayerInfo.radiusIdx = mHTableRange.size() * 0.99;
+			mPlayerInfo.radiusIdx = mRadiusArray.size() * 0.99;
 
 			distFromBB += 120;
 
-			int tempPlacement = (mHalfCourtCenterPt.x + mHTableRange[mPlayerInfo.radiusIdx])
-							- (mHalfCourtCenterPt.x - mHTableRange[mPlayerInfo.radiusIdx]);
+			int tempPlacement = (mHalfCourtCenterPt.x + mRadiusArray[mPlayerInfo.radiusIdx])
+							- (mHalfCourtCenterPt.x - mRadiusArray[mPlayerInfo.radiusIdx]);
 			
 			if (bodyCenter.x > mFreezeCenterPt.x) tempPlacement -= 1;
 			else tempPlacement = 0;
-			tempPlacement += (mHalfCourtCenterPt.x - mHTableRange[mPlayerInfo.radiusIdx]);
+			tempPlacement += (mHalfCourtCenterPt.x - mRadiusArray[mPlayerInfo.radiusIdx]);
 
 			mPlayerInfo.placement = tempPlacement;
 		}
@@ -58,23 +58,23 @@ PlayerInfo CourtPositionEstimator::findBody(const Mat & grayFrame)
 		{
 			int tempPlacement;
 			if (bodyCenter.x < mFreezeCenterPt.x) tempPlacement = 0;
-			else tempPlacement = (mHalfCourtCenterPt.x + mHTableRange[mPlayerInfo.radiusIdx])
-							- (mHalfCourtCenterPt.x - mHTableRange[mPlayerInfo.radiusIdx]) - 1;
+			else tempPlacement = (mHalfCourtCenterPt.x + mRadiusArray[mPlayerInfo.radiusIdx])
+							- (mHalfCourtCenterPt.x - mRadiusArray[mPlayerInfo.radiusIdx]) - 1;
 			
 			mPlayerInfo.placement = tempPlacement;
-			mPlayerInfo.radiusIdx = mHTableRange.size() * 0.01;
+			mPlayerInfo.radiusIdx = mRadiusArray.size() * 0.01;
 		}
 		else 
 		{
 			if (mVectorOfBodys[j].height < 170)	  //NOTE:  If not true, then we have inaccurate calculation of body height from detectMultiscale method.  Do not estimate a player position for it. 
 			{
-				mPlayerInfo.radiusIdx = findIndex_BSearch(mHTableRange, distFromBB);
+				mPlayerInfo.radiusIdx = findIndex_BSearch(mRadiusArray, distFromBB);
 				mPlayerInfo.radiusIdx += 5;
 				if ((xDistFromBB < 51) && (yDistFromBB < 70)) mPlayerInfo.radiusIdx = 0;
 				
 				double percentPlacement = (double) (bodyCenter.x - mLeftImgBoundary) / (mRightImgBoundary - mLeftImgBoundary);
-				int leftRingBound		= mHalfCourtCenterPt.x - mHTableRange[mPlayerInfo.radiusIdx];
-				int rightRingBound		= mHalfCourtCenterPt.x + mHTableRange[mPlayerInfo.radiusIdx];
+				int leftRingBound		= mHalfCourtCenterPt.x - mRadiusArray[mPlayerInfo.radiusIdx];
+				int rightRingBound		= mHalfCourtCenterPt.x + mRadiusArray[mPlayerInfo.radiusIdx];
 				int chartPlacementTemp	= (rightRingBound - leftRingBound) * percentPlacement;
 				int chartPlacement		= leftRingBound + chartPlacementTemp;
 

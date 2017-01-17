@@ -33,7 +33,7 @@ public:
 	Point mFreezeCenterPt;
 	int mLeftImgBoundary;
 	int mRightImgBoundary;
-	vector<int> mHTableRange;
+	vector<int> mRadiusArray;
 	vector<Rect> mVectorOfBodys;		
 };
 

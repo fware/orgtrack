@@ -10,37 +10,28 @@ using namespace cv;
 SecondFrameProcessor::SecondFrameProcessor(const Mat& firstFrame) : thresh(255)
 {
 	bg_model = createBackgroundSubtractorMOG2(30, 16, false);
-    imgBball = Mat::zeros(firstFrame.size(),CV_8UC3);
+    imgBball = Mat::zeros(firstFrame.size(),CV_8UC1);
+    rng(12345);
 }
 
 Rect  SecondFrameProcessor::secondProcessFrame(const Mat & img)
 {
-	if( fgimg.empty() )
-	{
-	  fgimg.create(img.size(), img.type());
-	}
-
 	bg_model->apply(img, fgmask);
-	
-	fgimg = Scalar::all(0);
-	img.copyTo(fgimg, fgmask);
-	
 	Canny(fgmask, fgmask, thresh, thresh*2, 3);	
 	findContours(fgmask,bballContours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 	
 	for (int i = 0; i < bballContours.size(); i++ )
 	{
-		Scalar color = Scalar( 255, 128, 30 );
+		Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255) );
 		drawContours(imgBball,bballContours,i,color,2,8,hierarchy,0,Point());
 	}
 	
 	
 	//------------Track the basketball!!!!---------------
-	getGray(imgBball, imgBBallGray);
 	float canny1 = 100;
 	float canny2 = 14; //16;
-	double minDist = imgBBallGray.rows/4;  //8; //4;
-	HoughCircles(imgBBallGray, basketballTracker, CV_HOUGH_GRADIENT, 1, minDist, canny1, canny2, 1, 9 );
+	double minDist = imgBball.rows/4;  //8; //4;
+	HoughCircles(imgBball, basketballTracker, CV_HOUGH_GRADIENT, 1, minDist, canny1, canny2, 1, 9 );
 
 	Rect bballRect;
 	if (basketballTracker.size() > 0)
