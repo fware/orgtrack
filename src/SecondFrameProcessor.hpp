@@ -24,7 +24,6 @@ public:
 	SecondFrameProcessor(const Mat& firstFrame);
 public:
 	Rect  secondProcessFrame(const Mat& computeFrame);
-	void getGray(const Mat& image, Mat& gray);
 private:
 	int thresh;
 	RNG rng;

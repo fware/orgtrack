@@ -50,14 +50,3 @@ Rect  SecondFrameProcessor::secondProcessFrame(const Mat & img)
 
 	return bballRect;
 }
-
-
-void SecondFrameProcessor::getGray(const Mat& image, Mat& gray)
-{
-	if (image.channels() == 3)
-		cv::cvtColor(image, gray, CV_BGR2GRAY);
-	else if (image.channels() == 4)
-		cv::cvtColor(image, gray, CV_BGRA2GRAY);
-	else if (image.channels() == 1)
-		gray = image;
-}
