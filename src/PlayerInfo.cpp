@@ -1,7 +1,10 @@
-/*****************************************************************************
-*   WareShop Consulting LLC
-*   Copyright 2016.
-*****************************************************************************/
+/******
+ *  PlayerInfo.cpp
+ *  Author:  WareShop Consulting LLC
+ *
+ *  Copyright 2016
+ *
+ */
 #include "PlayerInfo.hpp"
 
 using namespace std;

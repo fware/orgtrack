@@ -1,3 +1,12 @@
+/******
+ *  SecondFrameProcessor.hpp
+ *  Author:  WareShop Consulting LLC
+ *
+ *  Copyright 2016
+ *
+ */
+#ifndef SECONDFRAMEPROCESSOR_HPP_
+#define SECONDFRAMEPROCESSOR_HPP_
 #pragma once
 /******
  * Author:  Fred Ware
@@ -12,8 +21,11 @@
 #include <iostream>
 // Includes:
 #include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
 #include "opencv2/video/background_segm.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "Utils.hpp"
+#include "Logger.hpp"
 
 using namespace std;
 using namespace cv;
@@ -25,12 +37,19 @@ public:
 public:
 	Rect  secondProcessFrame(const Mat& computeFrame);
 private:
+	logLevel_e extern_logLevel;
 	int thresh;
+	float canny1;
+	float canny2;
 	RNG rng;
+	Mat fgimg;
 	Mat fgmask;
 	Mat imgBball;
+	Mat imgBballGray;
+	Rect bballRect;
+	Utils utils;
 	Ptr<BackgroundSubtractor> bg_model;	
 	vector<vector<Point> > bballContours;
-	vector<Vec4i> hierarchy;
 	vector<Vec3f> basketballTracker;
 };
+#endif

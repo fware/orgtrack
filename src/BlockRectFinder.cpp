@@ -1,13 +1,17 @@
-/*****************************************************************************
-*   Copyright 2016.
-*****************************************************************************/
-
-////////////////////////////////////////////////////////////////////
+/******
+ *  BlockRectFinder.cpp
+ *  Author:  WareShop Consulting LLC
+ *
+ *  Copyright 2016
+ *
+ */
 // File includes:
 #include "BlockRectFinder.hpp"
+#include "Logger.hpp"
 
 BlockRectFinder::BlockRectFinder() : mHaveBackboard(false)
 {
+	extern_logLevel = logDEBUG2;
 }
 
 Rect BlockRectFinder::getBoundRects(const Mat& imageFrame, 
@@ -23,8 +27,9 @@ Rect BlockRectFinder::getBoundRects(const Mat& imageFrame,
 	//vector<Point2f> ccenter( boardContours.size() );
 	//vector<float> rradius( boardContours.size() );
 	
-	///*************************Start of main code to detect BackBoard************************* 	
-	for ( int i = 0; i < boardContours.size(); i++ ) {
+	///*************************Start of main code to detect BackBoard*************************
+	//log(logINFO) << "boardContours.size()=" << boardContours.size();
+	for ( size_t i = 0; i < boardContours.size(); i++ ) {
 		approxPolyDP(Mat(boardContours[i]),contours_poly[i],3,true);	//Finds all polygon shapes in the contour input. Used later to find rectangles, i.e. basketball backboard.
 		boundRects[i] = boundingRect(Mat(contours_poly[i]));			//Converting all the polygons found into rectangles.
 																		//Below will be try to identify which one is the basketball backboard.
@@ -32,6 +37,7 @@ Rect BlockRectFinder::getBoundRects(const Mat& imageFrame,
 
 	Rect backBoardRect = findBackboard(imageFrame, boardContours.size(), boundRects, file_number);
 
+	log(logDEBUG) << "End of getBoundRects";
 	return backBoardRect;
 	
 }
@@ -44,8 +50,8 @@ Rect BlockRectFinder::findBackboard(const Mat& imgFrame,
 	double bb_ratio = 0.0;
 	double bb_w = 0.0;
 	double bb_h = 0.0;
-	double bb_area = 0.0;
-	int bb_x, bb_y;
+	//double bb_area = 0.0;
+	//int bb_x, bb_y;
 
 	//-----------Find the Backboard!!!-----------------
 	for (size_t j = 0; j < bbContoursSize; j++) 
@@ -62,8 +68,8 @@ Rect BlockRectFinder::findBackboard(const Mat& imgFrame,
 			&& (bb_ratio > 1.50) 
 			&& (bb_ratio < 2.00)) {
 
-			if (file_number <= 3) 
-			{
+			//if (file_number <= 3)
+			//{
 				if (bound_Rects[j].tl().x < imgFrame.size().width/2) 
 				{
 					if (!mHaveBackboard) 
@@ -81,8 +87,8 @@ Rect BlockRectFinder::findBackboard(const Mat& imgFrame,
 					mFreezeCenterX = (mFreezeBB.tl().x+(mFreezeBB.width/2));
 					mFreezeCenterY = (mFreezeBB.tl().y+(mFreezeBB.height/2));
 				}
-			}
-			else if (file_number == 4) 
+			//}
+			/*else if (file_number == 4)
 			{
 				if (bound_Rects[j].tl().x > imgFrame.size().width/2) 
 				{
@@ -103,10 +109,11 @@ Rect BlockRectFinder::findBackboard(const Mat& imgFrame,
 					mFreezeCenterX = (mFreezeBB.tl().x+(mFreezeBB.width/2));
 					mFreezeCenterY = (mFreezeBB.tl().y+(mFreezeBB.height/2));
 				}
-			}
+			}*/
 		}
 	}
 	
+	log(logDEBUG) << "End of findBackboard";
 	return mFreezeBB;
 
 }

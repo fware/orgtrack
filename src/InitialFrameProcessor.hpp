@@ -1,11 +1,13 @@
-#pragma once
 /******
- * Author:  Fred Ware
+ *  InitialFrameProcessor.hpp
+ *  Author:  WareShop Consulting LLC
  *
- * WareShop Consulting LLC
- * Copyright 2016
+ *  Copyright 2016
  *
  */
+#ifndef INITIALFRAMEPROCESSOR_HPP_
+#define INITIALFRAMEPROCESSOR_HPP_
+#pragma once
 
 //#include <unistd.h>
 #include <stdio.h>
@@ -29,9 +31,10 @@ public:
 	Mat getGrayForRect();
 	Rect getBBOffset();
 private:
+	logLevel_e extern_logLevel;
 	int m_filenumber;
 	int m_thresh;
-	Mat grayForRect;
 	BlockRectFinder m_bRF;
 
 };
+#endif

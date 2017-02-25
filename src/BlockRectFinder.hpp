@@ -1,10 +1,13 @@
-#pragma once
 /******
- *  Author:  Fred Ware
+ *  BlockRectFinder.hpp
+ *  Author:  WareShop Consulting LLC
  *
  *  Copyright 2016
  *
  */
+#pragma once
+#ifndef BLOCKRECTFINDER_HPP_
+#define BLOCKRECTFINDER_HPP_
 
 // Includes:
 #include "opencv2/core/core.hpp"
@@ -13,11 +16,11 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/features2d/features2d.hpp"
-#include "DebugHelpers.hpp"
 #include <unistd.h>
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
+#include "Logger.hpp"
 
 using namespace std;
 using namespace cv;
@@ -34,6 +37,7 @@ public:
 	Rect getBBOffset();
 
 private:
+	logLevel_e extern_logLevel;
 	bool mHaveBackboard;
 	Rect mFreezeBB;
 	Rect mOffsetBackboard;
@@ -43,5 +47,5 @@ private:
 	int mFreezeCenterY;
 	int mFileNumber;
 };
-
+#endif
  

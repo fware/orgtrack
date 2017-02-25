@@ -1,11 +1,12 @@
-
 /******
- * Author:  Fred Ware
+ *  Utils.hpp
+ *  Author:  WareShop Consulting LLC
  *
- * WareShop Consulting LLC
- * Copyright 2016
+ *  Copyright 2016
  *
  */
+#ifndef UTILS_HPP_
+#define UTILS_HPP_
 #include <stdio.h>
 	 // Includes:
 #include "opencv2/core/core.hpp"
@@ -27,3 +28,5 @@ public:
 	int findIndex_BSearch(const vector< int> &my_numbers, int key);
 	void getGray(const Mat& image, Mat& gray);
 };
+#endif
+

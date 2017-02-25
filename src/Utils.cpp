@@ -1,8 +1,8 @@
 /******
- * Author:  Fred Ware
+ *  Utils.cpp
+ *  Author:  WareShop Consulting LLC
  *
- * WareShop Consulting LLC
- * Copyright 2016
+ *  Copyright 2016
  *
  */
 #include "Utils.hpp"

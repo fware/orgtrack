@@ -1,3 +1,12 @@
+/******
+ *  PlayerInfo.hpp
+ *  Author:  WareShop Consulting LLC
+ *
+ *  Copyright 2016
+ *
+ */
+#ifndef PLAYERINFO_HPP_
+#define PLAYERINFO_HPP_
 //Standard Includes
 #pragma once
 #include <stdio.h>
@@ -18,4 +27,4 @@ public:
 	Point   position; 
 	int 	frameCount;
 };
-
+#endif
