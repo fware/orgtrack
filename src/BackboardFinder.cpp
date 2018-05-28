@@ -5,18 +5,18 @@
  *  Copyright 2016
  *
  */
-#include "InitialFrameProcessor.hpp"
+#include "BackboardFinder.hpp"
 
 using namespace std;
 using namespace cv;
 
 
-InitialFrameProcessor::InitialFrameProcessor(int t, int file_number) : m_thresh(t), m_filenumber(file_number) //, m_bRF()
+BackboardFinder::BackboardFinder(int t, int file_number) : m_thresh(t), m_filenumber(file_number) //, m_bRF()
 {
 	extern_logLevel = logDEBUG2;
 }
 
-Rect InitialFrameProcessor::initialProcessFrame(const Mat& grayImage)
+Rect BackboardFinder::process(const Mat& grayImage)
 {
 	Mat threshold_output;
 	vector<Vec4i> hierarchy;
@@ -29,17 +29,17 @@ Rect InitialFrameProcessor::initialProcessFrame(const Mat& grayImage)
 
 	Rect backBoardRect = m_bRF.getBoundRects(grayImage, threshold_output, hierarchy, boardContours, m_filenumber);
 
-	log(logDEBUG) << "End of initialProcessFrame";
+	log(logDEBUG4) << "End of initialProcessFrame";
 
 	return backBoardRect;//m_bRF.getBoundRect(threshold_output, hierarchy, boardContours);
 }
 
-Rect InitialFrameProcessor::getBBOffset() 
+Rect BackboardFinder::getBBOffset() 
 {
 	return m_bRF.getBBOffset();
 }
 
-void InitialFrameProcessor::getGray(const Mat& image, Mat& gray)
+void BackboardFinder::getGray(const Mat& image, Mat& gray)
 {
     if (image.channels()  == 3)
         cv::cvtColor(image, gray, CV_BGR2GRAY);

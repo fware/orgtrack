@@ -49,6 +49,6 @@ public:
 	int mLeftImgBoundary;
 	int mRightImgBoundary;
 	vector<int> mRadiusArray;
-	vector<Rect> mVectorOfBodys;		
+	vector<Rect> mVectorOfBodies;		
 };
 #endif

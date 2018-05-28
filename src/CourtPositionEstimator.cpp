@@ -31,20 +31,20 @@ CourtPositionEstimator::CourtPositionEstimator(
 PlayerInfo CourtPositionEstimator::findBody(int count, const Mat & grayFrame, Mat& image)
 {
 	//-- detect body
-	mClassifier.detectMultiScale(grayFrame, mVectorOfBodys, 1.1, 2, 18|9, Size(3,7));
+	mClassifier.detectMultiScale(grayFrame, mVectorOfBodies, 1.1, 2, 18|9, Size(3,7));
 
-	for( size_t j = 0; j < mVectorOfBodys.size(); j++ )
+	for( size_t j = 0; j < mVectorOfBodies.size(); j++ )
 	{
 		stringstream heightS;
-		heightS << mVectorOfBodys[j].height;
+		heightS << mVectorOfBodies[j].height;
 		string heightStr = "mVectorOfBodys[j].height=" + heightS.str();
 		//log(logINFO) << heightStr;
 		stringstream widthS;
-		widthS << mVectorOfBodys[j].width;
+		widthS << mVectorOfBodies[j].width;
 		string widthStr = "mVectorOfBodys[j].width=" + widthS.str();
 		//log(logINFO) << widthStr;
 		//-----------Identifying player height and position!!--------------
-		Point bodyCenter( mVectorOfBodys[j].x + mVectorOfBodys[j].width*0.5, mVectorOfBodys[j].y + mVectorOfBodys[j].height*0.5 ); 
+		Point bodyCenter( mVectorOfBodies[j].x + mVectorOfBodies[j].width*0.5, mVectorOfBodies[j].y + mVectorOfBodies[j].height*0.5 ); 
 		
 		mPlayerInfo.activeValue = 1;
 		mPlayerInfo.position = bodyCenter;
@@ -87,7 +87,7 @@ PlayerInfo CourtPositionEstimator::findBody(int count, const Mat & grayFrame, Ma
 		}
 		else 
 		{
-			if (mVectorOfBodys[j].height < 170)	  //NOTE:  If not true, then we have inaccurate calculation of body height from detectMultiscale method.  Do not estimate a player position for it. 
+			if (mVectorOfBodies[j].height < 170)	  //NOTE:  If not true, then we have inaccurate calculation of body height from detectMultiscale method.  Do not estimate a player position for it. 
 			{
 				//log("height is < 170");
 				mPlayerInfo.radiusIdx = findIndex_BSearch(mRadiusArray, distFromBB);
@@ -109,13 +109,13 @@ PlayerInfo CourtPositionEstimator::findBody(int count, const Mat & grayFrame, Ma
 		}			
 		//--- End of adjusting player position on image of half court!!!-----
 
-		log(logDEBUG) << ": " << count << " return 1: End of findBody";
+		log(logDEBUG4) << ": " << count << " return 1: End of findBody";
 		return mPlayerInfo;
 
-		ellipse( image, bodyCenter, Size( mVectorOfBodys[j].width*0.5, mVectorOfBodys[j].height*0.5), 0, 0, 360, Scalar( 255, 0, 255 ), 4, 8, 0 );
+		ellipse( image, bodyCenter, Size( mVectorOfBodies[j].width*0.5, mVectorOfBodies[j].height*0.5), 0, 0, 360, Scalar( 255, 0, 255 ), 4, 8, 0 );
 	}
 
-	log(logDEBUG) << ": " << count << " return 2: End of findBody";
+	log(logDEBUG4) << ": " << count << " return 2: End of findBody";
 	return mPlayerInfo;
 
 	//return mVectorOfBodys;		

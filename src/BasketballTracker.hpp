@@ -30,12 +30,12 @@
 using namespace std;
 using namespace cv;
 
-class SecondFrameProcessor
+class BasketballTracker
 {
 public:
-	SecondFrameProcessor(const Mat& firstFrame);
+	BasketballTracker(const Mat& firstFrame);
 public:
-	Rect  secondProcessFrame(const Mat& computeFrame);
+	Rect  process(const Mat& computeFrame);
 private:
 	logLevel_e extern_logLevel;
 	int thresh;
@@ -50,6 +50,6 @@ private:
 	Utils utils;
 	Ptr<BackgroundSubtractor> bg_model;	
 	vector<vector<Point> > bballContours;
-	vector<Vec3f> basketballTracker;
+	//vector<Vec3f> basketballTracker;
 };
 #endif

@@ -5,20 +5,21 @@
  *  Copyright 2016
  *
  */
-#include "SecondFrameProcessor.hpp"
+#include "BasketballTracker.hpp"
+
 #include "Logger.hpp"
 
 using namespace std;
 using namespace cv;
 
-SecondFrameProcessor::SecondFrameProcessor(const Mat& firstFrame) : thresh(255), canny1(100.0), canny2(14.0)
+BasketballTracker::BasketballTracker(const Mat& firstFrame) : thresh(255), canny1(100.0), canny2(14.0)
 {
 	extern_logLevel = logDEBUG2;
 	bg_model = createBackgroundSubtractorMOG2(30, 16, false);
     rng(12345);
 }
 
-Rect  SecondFrameProcessor::secondProcessFrame(const Mat & img)
+Rect  BasketballTracker::process(const Mat & img)
 {
 	if (fgimg.empty())
 		fgimg.create(img.size(), img.type());
@@ -66,7 +67,7 @@ Rect  SecondFrameProcessor::secondProcessFrame(const Mat & img)
 		}
 	}
 
-	log(logDEBUG) << "End of secondProcessFrame";
+	log(logDEBUG4) << "End of secondProcessFrame";
 
 	return bballRect;
 }

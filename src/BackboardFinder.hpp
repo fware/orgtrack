@@ -20,13 +20,13 @@
 using namespace std;
 using namespace cv;
 
-class InitialFrameProcessor
+class BackboardFinder
 {
 
 public:
-	InitialFrameProcessor(int t, int file_number);
+	BackboardFinder(int t, int file_number);
 public:
-	Rect initialProcessFrame(const Mat& computeFrame);
+	Rect process(const Mat& computeFrame);
 	void getGray(const Mat& image, Mat& gray);
 	Mat getGrayForRect();
 	Rect getBBOffset();

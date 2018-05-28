@@ -37,7 +37,7 @@ Rect BlockRectFinder::getBoundRects(const Mat& imageFrame,
 
 	Rect backBoardRect = findBackboard(imageFrame, boardContours.size(), boundRects, file_number);
 
-	log(logDEBUG) << "End of getBoundRects";
+	log(logDEBUG4) << "End of getBoundRects";
 	return backBoardRect;
 	
 }
@@ -113,7 +113,7 @@ Rect BlockRectFinder::findBackboard(const Mat& imgFrame,
 		}
 	}
 	
-	log(logDEBUG) << "End of findBackboard";
+	log(logDEBUG4) << "End of findBackboard";
 	return mFreezeBB;
 
 }
