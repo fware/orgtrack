@@ -157,7 +157,7 @@ int main(int argc, const char** argv)
 	//Intialize the object used for initial and second phase frame processing.
 	Utils utils;
 	BackboardFinder backboardFinder(85, fileNumber);
-	BasketballTracker basketballTracker(firstFrame);
+	BasketballTracker basketballTracker;
 
 	firstFrame.release();
 	Mat grayImage;

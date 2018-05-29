@@ -1,5 +1,5 @@
 /******
- *  SecondFrameProcessor.cpp
+ *  BasketballTracker.cpp
  *  Author:  WareShop Consulting LLC
  *
  *  Copyright 2016
@@ -11,13 +11,6 @@
 
 using namespace std;
 using namespace cv;
-
-BasketballTracker::BasketballTracker(const Mat& firstFrame) : thresh(255), canny1(100.0), canny2(14.0)
-{
-	extern_logLevel = logDEBUG2;
-	bg_model = createBackgroundSubtractorMOG2(30, 16, false);
-    rng(12345);
-}
 
 Rect  BasketballTracker::process(const Mat & img)
 {
@@ -36,21 +29,21 @@ Rect  BasketballTracker::process(const Mat & img)
 	vector<Vec4i> pHierarchy;
 	findContours(fgmask,pBallContours,pHierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );	//Finds contours in foreground mask image.
 	
-	imgBball = Mat::zeros(fgmask.size(),CV_8UC3);
+	imgBall = Mat::zeros(fgmask.size(),CV_8UC3);
 	for (size_t i = 0; i < pBallContours.size(); i++ )
 	{
 		Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255) );
-		drawContours(imgBball,pBallContours,i,color,2,8,pHierarchy,0,Point());		//Draws contours onto output image, i.e. imgBball.
-																					//The goal here is the find and track the basketball inside of imgBball image frames.
+		drawContours(imgBall,pBallContours,i,color,2,8,pHierarchy,0,Point());		//Draws contours onto output image, i.e. imgBall.
+																					//The goal here is the find and track the basketball inside of imgBall image frames.
 	}
-	//rectangle(fgmask, bballRect.tl(), bballRect.br(), Scalar(60,180,255), 2, 8, 0 );
+	//rectangle(fgmask, ballRect.tl(), ballRect.br(), Scalar(60,180,255), 2, 8, 0 );
 	
 	
 	//------------Track the basketball!!!!---------------
 	vector<Vec3f> localBasketballTracker;
-	utils.getGray(imgBball, imgBballGray);
-	double minDist = imgBballGray.rows/8;  //8; //4;
-	HoughCircles(imgBballGray, localBasketballTracker, CV_HOUGH_GRADIENT, 1, minDist, 100, 14,/*canny1, canny2,*/ 1, 9 );
+	utils.getGray(imgBall, imgBallGray);
+	double minDist = imgBallGray.rows/8;  //8; //4;
+	HoughCircles(imgBallGray, localBasketballTracker, CV_HOUGH_GRADIENT, 1, minDist, 100, 14,/*canny1, canny2,*/ 1, 9 );
 
 	if (localBasketballTracker.size() > 0)
 	{
@@ -63,11 +56,18 @@ Rect  BasketballTracker::process(const Mat & img)
 
 			int bballXtl = (int)(localBasketballTracker[i][0] - bballRadius);
 			int bballYtl = (int)(localBasketballTracker[i][1] - bballRadius);
-			bballRect = Rect(bballXtl, bballYtl, bballDiameter, bballDiameter);
+			ballRect = Rect(bballXtl, bballYtl, bballDiameter, bballDiameter);
 		}
 	}
 
 	log(logDEBUG4) << "End of secondProcessFrame";
 
-	return bballRect;
+	return ballRect;
+}
+
+
+int getCoords()
+{
+	int lCoords[] = { 1, 2, 3, 4};
+	return lCoords[0];
 }
