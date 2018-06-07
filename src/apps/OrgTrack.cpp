@@ -41,7 +41,6 @@ static void help()
 int main(int argc, const char** argv)
 {
 	logLevel_e extern_logLevel = logDEBUG2;
-	//const string videofileName = argc >= 2 ? argv[1] : "v1.mp4";
 	const string videoIdx 							= argc >= 2 ? argv[1] : "1";
 	int fileNumber;
 	string videofileName;
@@ -60,43 +59,14 @@ int main(int argc, const char** argv)
 	{
 		videofileName 						= "/home/fred/Videos/testvideos/v" + vIdx + ".mp4";
 	}
-	else if ( fileNumber == 4 )
-	{
-		videofileName 						= "/home/fred/Videos/testvideos/m8.MOV";
-	}
-	else if ( fileNumber == 5 )
-	{
-		videofileName 						= "/home/fred/Videos/testvideos/v5.mp4";
-	}
-	else if ( fileNumber == 6 )
-	{
-		videofileName 						= "/home/fred/Videos/testvideos/v2_group.mp4";
-	}
-	else if ( fileNumber == 7 )
-	{
-		videofileName 						= "/home/fred/Videos/testvideos/v3_group.mp4";
-	}
-	else if ( fileNumber == 8 )
-	{
-		videofileName 						= "/home/fred/Videos/testvideos/v4_group.mp4";
-	}
-	/*else
-	{
-		videofileName						= "/home/fred/Videos/testvideos/m" + vIdx + ".MOV";
-	}*/
 
-	//logTest();
 	help();
 	int frameCount 									= 0;
-	const string bballPatternFile 					= "/home/fred/Pictures/OrgTrack_res/bball3_vga.jpg";
-	Mat patternImage 								= imread(bballPatternFile);
 	const string bballFileName 						= "/home/fred/Pictures/OrgTrack_res/bball-half-court-vga.jpeg";
 	Mat bbsrc 										= imread(bballFileName);
 	PlayerInfo playerInfo;
 	vector <int> hTableRange;
 	namedWindow("halfcourt", WINDOW_NORMAL);
-	//namedWindow("debugimage", WINDOW_NORMAL);
-
 	Mat img;
 	Scalar greenColor 								= Scalar (0, 215, 0);
 	String body_cascade_name 						= "/home/fred/Pictures/OrgTrack_res/cascadeconfigs/haarcascade_fullbody.xml";
@@ -114,7 +84,6 @@ int main(int argc, const char** argv)
 	vector<int> radiusArray;
 	Point courtArc[50][1200];
 	Rect ballRect;
-
 	const string OUTNAME = "v4_output_longversion.mp4";
 
 	VideoCapture cap(videofileName);
@@ -124,7 +93,6 @@ int main(int argc, const char** argv)
 		cout << "can not open video file " << videofileName << endl;
 		return -1;
 	}
-
 
 	cap >> firstFrame;
 	if (firstFrame.empty())
@@ -303,28 +271,3 @@ Rect findBackboard(const Mat& frame, BackboardFinder& backboardFinder)
 Rect getChartBBOffset(BackboardFinder& initialPipe) {
 	return initialPipe.getBBOffset();
 }
-
-/*
-void logTest()
-{
-    logLevel_e extern_logLevel = logERROR;
-	logLevel_e logLevel_Save = extern_logLevel;
-
-	extern_logLevel = logDEBUG3;
-
-	log(logINFO) << "foo " << "bar " << "baz";
-
-	int count = 3;
-	log(logDEBUG) << "A loop with " << count << " iterations";
-	for (int i = 0; i != count; ++i)
-	{
-		log(logDEBUG1) << "the counter i = " << i;
-		log(logDEBUG2) << "the counter i = " << i;
-	}
-
-	extern_logLevel = logLevel_Save;
-}
- */
-
-
-
