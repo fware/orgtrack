@@ -13,7 +13,7 @@ using namespace cv;
 
 BackboardFinder::BackboardFinder(int t, int file_number) : m_thresh(t), m_filenumber(file_number) //, m_bRF()
 {
-	extern_logLevel = logDEBUG2;
+	extern_logLevel = logDEBUG4;
 }
 
 Rect BackboardFinder::process(const Mat& grayImage)

@@ -11,7 +11,7 @@
 
 BlockRectFinder::BlockRectFinder() : mHaveBackboard(false)
 {
-	extern_logLevel = logDEBUG2;
+	extern_logLevel = logDEBUG4;
 }
 
 Rect BlockRectFinder::getBoundRects(const Mat& imageFrame, 
@@ -32,7 +32,7 @@ Rect BlockRectFinder::getBoundRects(const Mat& imageFrame,
 	for ( size_t i = 0; i < boardContours.size(); i++ ) {
 		approxPolyDP(Mat(boardContours[i]),contours_poly[i],3,true);	//Finds all polygon shapes in the contour input. Used later to find rectangles, i.e. basketball backboard.
 		boundRects[i] = boundingRect(Mat(contours_poly[i]));			//Converting all the polygons found into rectangles.
-																		//Below will be try to identify which one is the basketball backboard.
+																		//Below we will try to identify which one is the basketball backboard.
 	}
 
 	Rect backBoardRect = findBackboard(imageFrame, boardContours.size(), boundRects, file_number);
@@ -42,10 +42,7 @@ Rect BlockRectFinder::getBoundRects(const Mat& imageFrame,
 	
 }
 
-Rect BlockRectFinder::findBackboard(const Mat& imgFrame, 
-										size_t bbContoursSize, 
-										vector<Rect> bound_Rects,
-										int file_number) {
+Rect BlockRectFinder::findBackboard(const Mat& imgFrame, size_t bbContoursSize,	vector<Rect> bound_Rects, int file_number) {
 
 	double bb_ratio = 0.0;
 	double bb_w = 0.0;

@@ -35,12 +35,12 @@ Rect getChartBBOffset(BackboardFinder& initialPipe);
 static void help()
 {
 	printf("\nUsing various functions in opencv to track a basketball.\n"
-			"			./OrgTrack {file index number} (choose 1 thru 8)\n\n");
+			"			./OrgTrack {file index number} (choose 1 thru 12)\n\n");
 }
 
 int main(int argc, const char** argv)
 {
-	logLevel_e extern_logLevel = logDEBUG2;
+	logLevel_e extern_logLevel = logDEBUG4;
 	const string videoIdx 							= argc >= 2 ? argv[1] : "1";
 	int fileNumber;
 	string videofileName;
@@ -55,9 +55,13 @@ int main(int argc, const char** argv)
 	vSS << fileNumber;
 	string vIdx 									= vSS.str();
 
-	if ( fileNumber < 4 )
+	if ( fileNumber <= 4 )
 	{
 		videofileName 						= "/home/fred/Videos/testvideos/v" + vIdx + ".mp4";
+	}
+	else if ( fileNumber > 5 )
+	{
+		videofileName 						= "/home/fred/Videos/testvideos/v" + vIdx + ".MOV";
 	}
 
 	help();
