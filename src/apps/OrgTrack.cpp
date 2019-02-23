@@ -106,8 +106,8 @@ int main(int argc, const char** argv)
 	}
 
 	//int ex = static_cast<int>(cap.get(CV_CAP_PROP_FOURCC));   // Get Codec Type - Int form
-	Size S = Size((int) cap.get(CV_CAP_PROP_FRAME_WIDTH),    // Acquire input size
-			(int) cap.get(CV_CAP_PROP_FRAME_HEIGHT));
+	Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
+			(int) cap.get(CAP_PROP_FRAME_HEIGHT));
 
 	log(logDEBUG4) << "first frame [" << S.width << "]";
 	if (S.width > 640) 

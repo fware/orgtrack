@@ -188,9 +188,9 @@ int Utils::findIndex_BSearch(const vector< int> &numbersArray, int key) {
 void Utils::getGray(const Mat& image, Mat& gray)
 {
     if (image.channels()  == 3)
-        cv::cvtColor(image, gray, CV_BGR2GRAY);
+        cv::cvtColor(image, gray, COLOR_BGR2GRAY);
     else if (image.channels() == 4)
-        cv::cvtColor(image, gray, CV_BGRA2GRAY);
+        cv::cvtColor(image, gray, COLOR_BGRA2GRAY);
     else if (image.channels() == 1)
         gray = image;
 }

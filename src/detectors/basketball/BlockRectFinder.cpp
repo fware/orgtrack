@@ -20,7 +20,7 @@ Rect BlockRectFinder::getBoundRects(const Mat& imageFrame,
 										vector< vector<Point> > boardContours,
 										int file_number)
 {
-	findContours( threshold_output, boardContours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+	findContours( threshold_output, boardContours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0) );
 	
 	vector< vector<Point> > contours_poly( boardContours.size() );
 	vector<Rect> boundRects( boardContours.size() );

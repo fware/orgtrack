@@ -27,7 +27,7 @@ Rect  BasketballTracker::process(const Mat & img)
 
 	vector<vector<Point> > pBallContours;
 	vector<Vec4i> pHierarchy;
-	findContours(fgmask,pBallContours,pHierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );	//Finds contours in foreground mask image.
+	findContours(fgmask, pBallContours, pHierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0) );	//Finds contours in foreground mask image.
 	
 	imgBall = Mat::zeros(fgmask.size(),CV_8UC3);
 	for (size_t i = 0; i < pBallContours.size(); i++ )
@@ -43,7 +43,7 @@ Rect  BasketballTracker::process(const Mat & img)
 	vector<Vec3f> localBasketballTracker;
 	utils.getGray(imgBall, imgBallGray);
 	double minDist = imgBallGray.rows/8;  //8; //4;
-	HoughCircles(imgBallGray, localBasketballTracker, CV_HOUGH_GRADIENT, 1, minDist, 100, 14,/*canny1, canny2,*/ 1, 9 );
+	HoughCircles(imgBallGray, localBasketballTracker, HOUGH_GRADIENT, 1, minDist, 100, 14,/*canny1, canny2,*/ 1, 9 );
 
 	if (localBasketballTracker.size() > 0)
 	{
