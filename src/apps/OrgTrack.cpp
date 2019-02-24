@@ -28,7 +28,7 @@
 using namespace std;
 using namespace cv;
 
-Rect findBackboard(const Mat& frame, BackboardFinder& backboardFinder);
+Rect findBackboard(BackboardFinder& backboardFinder, const Mat& frame, int leftBBRegionLimit, int rightBBRegionLimit, int bottomBBRegionLimit);
 Rect getChartBBOffset(BackboardFinder& initialPipe);
 //void logTest();
 
@@ -40,7 +40,7 @@ static void help()
 
 int main(int argc, const char** argv)
 {
-	logLevel_e extern_logLevel = logDEBUG4;
+	logLevel_e extern_logLevel = logINFO;
 	const string videoIdx 							= argc >= 2 ? argv[1] : "1";
 	int fileNumber;
 	string videofileName;
@@ -55,14 +55,16 @@ int main(int argc, const char** argv)
 	vSS << fileNumber;
 	string vIdx 									= vSS.str();
 
-	if ( fileNumber <= 4 )
+	if ( fileNumber <= 5 )
 	{
 		videofileName 						= "/home/fred/Videos/testvideos/v" + vIdx + ".mp4";
 	}
-	else if ( fileNumber > 5 )
+	else if ( fileNumber > 6 && fileNumber < 18 )
 	{
 		videofileName 						= "/home/fred/Videos/testvideos/v" + vIdx + ".MOV";
 	}
+	else
+		videofileName 						= "/home/fred/Videos/testvideos/v" + vIdx + ".mp4";
 
 	help();
 	int frameCount 									= 0;
@@ -83,6 +85,9 @@ int main(int argc, const char** argv)
 	int rightActiveBoundary;
 	int topActiveBoundary;
 	int bottomActiveBoundary;
+	int leftBBRegionLimit;
+	int rightBBRegionLimit;
+	int bottomBBRegionLimit;
 	bool sizeFlag = false;
 	bool haveShotRings = false;	
 	vector<int> radiusArray;
@@ -123,12 +128,15 @@ int main(int argc, const char** argv)
 	rightActiveBoundary			= firstFrame.cols*3/4;
 	topActiveBoundary			= firstFrame.rows/4;
 	bottomActiveBoundary		= firstFrame.rows*3/4;
+	leftBBRegionLimit = (int) firstFrame.cols * 3 / 8;
+	rightBBRegionLimit = (int) firstFrame.cols * 5 / 8;
+	bottomBBRegionLimit = (int) leftActiveBoundary;
 
 	Mat imgBball = Mat::zeros(firstFrame.size(),CV_8UC3);
 
 	//Intialize the object used for initial and second phase frame processing.
 	Utils utils;
-	BackboardFinder backboardFinder(85, fileNumber);
+	BackboardFinder backboardFinder(85, fileNumber, S);
 	BasketballTracker basketballTracker;
 
 	firstFrame.release();
@@ -154,6 +162,11 @@ int main(int argc, const char** argv)
 			resize(img, img, S);
 		}
 
+        if (fileNumber > 10)
+        {
+        	flip(img, img, 0);
+        }
+
 		frameCount++;
 
 		if( img.empty() )
@@ -163,7 +176,7 @@ int main(int argc, const char** argv)
 		if (Backboard.area() == 0) 
 		{
 			utils.getGray(img,grayImage);
-			Backboard = findBackboard(grayImage, backboardFinder);
+			Backboard = findBackboard(backboardFinder, grayImage, leftBBRegionLimit, rightBBRegionLimit, bottomBBRegionLimit);
 			Point tempPoint( (Backboard.tl().x + (Backboard.width/2)), (Backboard.tl().y + (Backboard.height/2)) );
 			courtEstimator.setBackboardPoint(tempPoint);
 
@@ -263,11 +276,11 @@ int main(int argc, const char** argv)
 	return 0;
 }
 
-Rect findBackboard(const Mat& frame, BackboardFinder& backboardFinder) 
+Rect findBackboard(BackboardFinder& backboardFinder, const Mat& grayImage, int leftBBRegionLimit, int rightBBRegionLimit, int bottomBBRegionLimit)
 {
 	Rect boundRect;
 
-	boundRect = backboardFinder.process(frame);
+	boundRect = backboardFinder.process(grayImage, leftBBRegionLimit, rightBBRegionLimit, bottomBBRegionLimit);
 
 	return boundRect;
 }

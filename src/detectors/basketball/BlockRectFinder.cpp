@@ -11,7 +11,7 @@
 
 BlockRectFinder::BlockRectFinder() : mHaveBackboard(false)
 {
-	extern_logLevel = logDEBUG4;
+	extern_logLevel = logINFO;
 }
 
 Rect BlockRectFinder::getBoundRects(const Mat& imageFrame, 
@@ -42,8 +42,8 @@ Rect BlockRectFinder::getBoundRects(const Mat& imageFrame,
 	
 }
 
-Rect BlockRectFinder::findBackboard(const Mat& imgFrame, size_t bbContoursSize,	vector<Rect> bound_Rects, int file_number) {
-
+Rect BlockRectFinder::findBackboard(const Mat& imgFrame, size_t bbContoursSize,	vector<Rect> bound_Rects, int file_number)
+{
 	double bb_ratio = 0.0;
 	double bb_w = 0.0;
 	double bb_h = 0.0;

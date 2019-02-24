@@ -25,7 +25,7 @@ CourtPositionEstimator::CourtPositionEstimator(
 	  mRightImgBoundary(rightImgBoundary)  //,
 //	  mRadiusArray(radiusArray)
 {
-	extern_logLevel = logDEBUG4;
+	extern_logLevel = logINFO;
 }
 
 PlayerInfo CourtPositionEstimator::findBody(int count, const Mat & grayFrame, Mat& image)
