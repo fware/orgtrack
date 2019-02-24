@@ -40,27 +40,21 @@ int ShotEstimator::initialize()
 
 object_results ShotEstimator::process(Mat& basket_region_image)
 {
-	log(logINFO) << __FILE__  << " " << __FUNCTION__ << " Bug 1";
 	stringstream ss;
 
     //! [Prepare blob]
-	log(logINFO) << __FILE__  << " basket_region_image[" << basket_region_image.cols << " x " << basket_region_image.rows <<  "] "<< __FUNCTION__ << " Bug 2";
     Mat inputBlob = blobFromImage(basket_region_image, 1 / 255.F, Size(416, 416), Scalar(), true, false); //Convert Mat to batch of images
     //! [Prepare blob]
 
     //! [Set input blob]
-	log(logINFO) << __FILE__  << " " << __FUNCTION__ << " Bug 3";
     m_net.setInput(inputBlob, "data");                   //set the network input
     //! [Set input blob]
 
     //! [Make forward pass]
-	log(logINFO) << __FILE__  << " " << __FUNCTION__ << " Bug 4";
     Mat detectionMat = m_net.forward("detection_out");   //compute output
 
-	log(logINFO) << __FILE__  << " " << __FUNCTION__ << " Bug 5";
     object_results results;
 
-	log(logINFO) << __FILE__  << " " << __FUNCTION__ << " Bug 6";
     for (int i = 0; i < detectionMat.rows; i++)
     {
         const int probability_index = 5;

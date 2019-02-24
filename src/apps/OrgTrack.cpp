@@ -153,6 +153,8 @@ int main(int argc, const char** argv)
 		return -1;
 	}
 
+	shotEstimator.initialize();
+
 	//Instantiate object to handle body tracking.
 	CourtPositionEstimator courtEstimator(body_cascade, playerInfo, leftActiveBoundary, rightActiveBoundary);  //, radiusArray);
 
@@ -254,9 +256,9 @@ int main(int argc, const char** argv)
 				{
 					//Shot on basket region
 					Mat basketRoI = img(Backboard).clone();
-					resize(basketRoI, basketRoI, Size(416, 416));
+					//resize(basketRoI, basketRoI, Size(416, 416));
 
-					//object_results shot_results = shotEstimator.process(basketRoI);   //Detect if shot is made from dnn model.
+					object_results shot_results = shotEstimator.process(basketRoI);   //Detect if shot is made from dnn model.
 
 					log(logDEBUG4) << "intersection:  estPlayerInfo.radiusIdx=" << estPlayerInfo.radiusIdx;
 					log(logDEBUG4) << "intersection:  estPlayerInfo.placement=" << estPlayerInfo.placement;
