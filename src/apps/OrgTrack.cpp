@@ -20,6 +20,7 @@
 #include "BackboardFinder.hpp"
 #include "BasketballTracker.hpp"
 #include "CourtPositionEstimator.hpp"
+#include "ShotEstimator.hpp"
 #include "PlayerInfo.hpp"
 #include "Utils.hpp"
 #include "Logger.hpp"
@@ -76,6 +77,9 @@ int main(int argc, const char** argv)
 	Mat img;
 	Scalar greenColor 								= Scalar (0, 215, 0);
 	String body_cascade_name 						= "/home/fred/Pictures/OrgTrack_res/cascadeconfigs/haarcascade_fullbody.xml";
+	String modelConfig								= "/home/fred/Dev/DNN_models/MadeShots/V1/made.cfg";
+	String modelBinary								= "/home/fred/Dev/DNN_models/MadeShots/V1/made_8200.weights";
+	String modelClasses								= "/home/fred/Dev/DNN_models/MadeShots/V1/made.names";
 	CascadeClassifier body_cascade; 
 	Mat firstFrame;
 	Rect offsetBackboard;
@@ -138,6 +142,7 @@ int main(int argc, const char** argv)
 	Utils utils;
 	BackboardFinder backboardFinder(85, fileNumber, S);
 	BasketballTracker basketballTracker;
+	ShotEstimator shotEstimator(modelConfig, modelBinary, modelClasses);
 
 	firstFrame.release();
 	Mat grayImage;
@@ -173,7 +178,7 @@ int main(int argc, const char** argv)
 			break;
 
 
-		if (Backboard.area() == 0) 
+		if (frameCount < 50 /*Backboard.area() == 0*/)
 		{
 			utils.getGray(img,grayImage);
 			Backboard = findBackboard(backboardFinder, grayImage, leftBBRegionLimit, rightBBRegionLimit, bottomBBRegionLimit);
@@ -184,8 +189,8 @@ int main(int argc, const char** argv)
 		}
 		else 
 		{
-			if (!haveShotRings) 
-			{
+			//if (!haveShotRings)
+			//{
 				chartBBOffsetRect = getChartBBOffset(backboardFinder);
 				Point semiCircleCenterPt( (chartBBOffsetRect.tl().x+chartBBOffsetRect.width/2) , (chartBBOffsetRect.tl().y + chartBBOffsetRect.height/2) );
 				courtEstimator.setHalfCourtCenterPt(semiCircleCenterPt);
@@ -213,7 +218,7 @@ int main(int argc, const char** argv)
 				}
 				haveShotRings = true;
 
-			}
+			//}
 			courtEstimator.setRadiusArray(radiusArray);
 			log(logDEBUG4) << frameCount << " End of building rings";
 		}
@@ -245,10 +250,20 @@ int main(int argc, const char** argv)
 				rectangle(img, Backboard.tl(), Backboard.br(), Scalar(180, 50, 0), 2, 8, 0);
 				//***************************************************************************
 
-				//if (objIntersect.area() > 0) {
-				//	log(logDEBUG4) << "We have an intersection!!";
-				//	circle(bbsrc, courtArc[estPlayerInfo.radiusIdx][estPlayerInfo.placement], 1, Scalar(0, 165, 255), 3);
-				//}
+				if (objIntersect.area() > 0)
+				{
+					//Shot on basket region
+					Mat basketRoI = img(Backboard).clone();
+					resize(basketRoI, basketRoI, Size(416, 416));
+
+					//object_results shot_results = shotEstimator.process(basketRoI);   //Detect if shot is made from dnn model.
+
+					log(logDEBUG4) << "intersection:  estPlayerInfo.radiusIdx=" << estPlayerInfo.radiusIdx;
+					log(logDEBUG4) << "intersection:  estPlayerInfo.placement=" << estPlayerInfo.placement;
+
+					if (estPlayerInfo.radiusIdx > 49)  estPlayerInfo.radiusIdx = 4;
+					circle(bbsrc, courtArc[estPlayerInfo.radiusIdx][estPlayerInfo.placement], 1, Scalar(0, 165, 255), 3);
+				}
 			}
 		}
 
