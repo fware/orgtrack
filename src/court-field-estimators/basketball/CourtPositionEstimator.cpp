@@ -143,7 +143,7 @@ double CourtPositionEstimator::oneDDist(double p1, double p2) {
 	return dist;
 }
 
-int CourtPositionEstimator::findIndex_BSearch(const vector< int> &numbersArray, int key) {
+int CourtPositionEstimator::findIndex_BSearch(const vector< int> &numbersArray, int value) {
 
 	int iteration = 0;
 	int left = 0;
@@ -153,11 +153,11 @@ int CourtPositionEstimator::findIndex_BSearch(const vector< int> &numbersArray, 
 	while (left <= right) {
 		iteration++;
 		mid = (int) ((left + right) / 2);
-		if (key <= numbersArray[mid]) 
+		if (value <= numbersArray[mid])
 		{
 			right = mid - 1;
 		}
-		else if (key > numbersArray[mid])
+		else if (value > numbersArray[mid])
 		{
 			left = mid + 1;
 		}
